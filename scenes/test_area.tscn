@@ -1,13 +1,27 @@
-[gd_scene load_steps=3 format=3 uid="uid://csif1m546detu"]
+[gd_scene load_steps=4 format=3 uid="uid://csif1m546detu"]
 
-[ext_resource type="Texture2D" uid="uid://ctgg7vt5w6bnw" path="res://icon.svg" id="1_f0p7x"]
+[ext_resource type="Texture2D" uid="uid://c2qc61ujuj75y" path="res://assets/Game_Jam_Arena_Mockup.webp" id="2_f0p7x"]
 [ext_resource type="PackedScene" uid="uid://j675g3vjfyf0" path="res://scenes/player.tscn" id="2_vtm10"]
+[ext_resource type="PackedScene" uid="uid://ckxyghevok4me" path="res://scenes/barrel.tscn" id="3_vtm10"]
 
 [node name="Test Area" type="Node2D"]
 
-[node name="Icon" type="Sprite2D" parent="."]
-position = Vector2(-7.12549, 24.375)
-scale = Vector2(108.752, 67.916)
-texture = ExtResource("1_f0p7x")
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = -1338.0
+offset_top = -770.0
+offset_right = 1325.0
+offset_bottom = 773.0
+texture = ExtResource("2_f0p7x")
 
-[node name="CharacterBody2D" parent="." instance=ExtResource("2_vtm10")]
+[node name="Player" parent="." instance=ExtResource("2_vtm10")]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="barrel" parent="." instance=ExtResource("3_vtm10")]
+position = Vector2(-260, 56)
+
+[node name="barrel2" parent="." instance=ExtResource("3_vtm10")]
+position = Vector2(-244, -57)
+
+[node name="barrel3" parent="." instance=ExtResource("3_vtm10")]
+position = Vector2(-111, 86)
