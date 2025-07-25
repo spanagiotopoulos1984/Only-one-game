@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="enemy_resource" load_steps=2 format=3 uid="uid://d3euygxf6a811"]
+
+[ext_resource type="Script" uid="uid://ojar5tvev0jm" path="res://scripts/enemy_resource.gd" id="1_0jbpm"]
+
+[resource]
+script = ExtResource("1_0jbpm")
+movement_speed = 35.0
+enemy_health = 1
+damage = 1
+type = 1
+enemy_level = 1
+metadata/_custom_type_script = "uid://ojar5tvev0jm"

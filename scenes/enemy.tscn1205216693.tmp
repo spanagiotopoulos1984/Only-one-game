@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmfao6fubhrgq"]
+
+[ext_resource type="Texture2D" uid="uid://dso61k61lbjsb" path="res://assets/sprites/enemies/Game_Jam_Enemy_SwordnShield.png" id="1_7p1mj"]
+[ext_resource type="Script" uid="uid://cfr55as8als02" path="res://scripts/enemy.gd" id="1_md0e3"]
+
+[node name="enemy_Swordman" type="CharacterBody2D" groups=["Player"]]
+script = ExtResource("1_md0e3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_7p1mj")

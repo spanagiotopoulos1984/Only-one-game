@@ -1,10 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://csif1m546detu"]
+[gd_scene load_steps=6 format=3 uid="uid://csif1m546detu"]
 
 [ext_resource type="Texture2D" uid="uid://c2qc61ujuj75y" path="res://assets/Game_Jam_Arena_Mockup.webp" id="2_f0p7x"]
 [ext_resource type="PackedScene" uid="uid://j675g3vjfyf0" path="res://scenes/player.tscn" id="2_vtm10"]
-[ext_resource type="PackedScene" uid="uid://ckxyghevok4me" path="res://scenes/barrel.tscn" id="3_vtm10"]
+[ext_resource type="PackedScene" uid="uid://bmfao6fubhrgq" path="res://scenes/base_enemy.tscn" id="4_a0f05"]
+[ext_resource type="PackedScene" uid="uid://b07vchdp1h1ml" path="res://scenes/trap.tscn" id="4_xnrqy"]
+[ext_resource type="Resource" uid="uid://tpknr3w3cbx6" path="res://resources/swordman_resource.tres" id="5_xnrqy"]
 
 [node name="Test Area" type="Node2D"]
+
+[node name="Node" type="Node" parent="."]
+
+[node name="Area2D" parent="Node" instance=ExtResource("4_xnrqy")]
+position = Vector2(-159, 113)
 
 [node name="TextureRect" type="TextureRect" parent="."]
 offset_left = -1338.0
@@ -14,14 +21,10 @@ offset_bottom = 773.0
 texture = ExtResource("2_f0p7x")
 
 [node name="Player" parent="." instance=ExtResource("2_vtm10")]
+z_index = 2
+position = Vector2(-12, -5)
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-
-[node name="barrel" parent="." instance=ExtResource("3_vtm10")]
-position = Vector2(-260, 56)
-
-[node name="barrel2" parent="." instance=ExtResource("3_vtm10")]
-position = Vector2(-244, -57)
-
-[node name="barrel3" parent="." instance=ExtResource("3_vtm10")]
-position = Vector2(-111, 86)
+[node name="enemy_Swordman" parent="." instance=ExtResource("4_a0f05")]
+z_index = 2
+position = Vector2(172, -94)
+resource = ExtResource("5_xnrqy")

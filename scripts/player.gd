@@ -1,3 +1,4 @@
+class_name Player
 extends CharacterBody2D 
 
 @export var speed := 200
@@ -5,6 +6,7 @@ extends CharacterBody2D
 @export var dash_cd := 3.0
 @export var player_health := 10.0
 @export var selected_weapon = WEAPONS.AXE
+@export var damage := 1
 
 @onready var dash_timer := $"UI Transform/Dash/Dash Timer"
 @onready var dash_pb := $"UI Transform/Dash/Dash PB"
@@ -12,7 +14,7 @@ extends CharacterBody2D
 @onready var health_pb := $"UI Transform/Health/Health PB"
 @onready var died_text := $"UI Transform/DiedText"
 @onready var player_node := $AnimatedSprite2D
-@onready var weapon_hitbox := $"Hitbox Area"
+@onready var weapon_hitbox := $WeaponArea
 
 # Weapon enum
 enum WEAPONS {AXE, HAMMER}
@@ -54,10 +56,10 @@ func process_movement_input():
 		
 	if direction.x > 0 :
 		player_node.flip_h = false
-		weapon_hitbox.position.x = 33
+		weapon_hitbox.scale.x = 1
 	elif direction.x < 0:
 		player_node.flip_h = true
-		weapon_hitbox.position.x = -33
+		weapon_hitbox.scale.x = -1
 	else:
 		if direction.y !=0:
 			weapon_hitbox.position.x = 0
@@ -128,3 +130,16 @@ func switch_to_axe_lattack() -> void:
 	
 func switch_to_axe_rattack() -> void:
 	is_axe_rattack  = true
+
+func _on_hurt_box_hurt(damage: Variant) -> void:
+	player_health -= damage
+	print(player_health)
+	
+func on_trap_entered(damage:int):
+	player_health -= damage
+
+func _on_weapon_area_body_entered(body: Node2D) -> void:
+	if body.is_in_group("Enemy"):
+		var enemy = body as Base_Enemy
+		enemy.hurt_enemy(damage)
+	pass # Replace with function body.
