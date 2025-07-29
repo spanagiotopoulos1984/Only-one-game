@@ -9,4 +9,5 @@ enemy_health = 1
 damage = 1
 type = 1
 enemy_level = 1
+attack_radius = 180
 metadata/_custom_type_script = "uid://ojar5tvev0jm"

@@ -2,31 +2,34 @@ class_name Player
 extends CharacterBody2D 
 
 @export var speed := 200
-@export var dash_range := 50
+@export var dash_range := 2
 @export var dash_cd := 3.0
 @export var player_health := 10.0
 @export var selected_weapon = WEAPONS.AXE
 @export var damage := 1
 
 @onready var dash_timer := $"UI Transform/Dash/Dash Timer"
+@onready var dash_duration := $"UI Transform/Dash/Dash Duration"
 @onready var dash_pb := $"UI Transform/Dash/Dash PB"
 @onready var animation_tree := $AnimationTree
 @onready var health_pb := $"UI Transform/Health/Health PB"
 @onready var died_text := $"UI Transform/DiedText"
 @onready var player_node := $AnimatedSprite2D
 @onready var weapon_hitbox := $WeaponArea
+@onready var blood_animation := $Blood_Splatter
 
 # Weapon enum
 enum WEAPONS {AXE, HAMMER}
 
 var last_known_direction := Vector2.ZERO
-var is_dashing := false
 
 # Movement booleans
 var is_axe_idle := true
 var is_axe_moving := false
 var is_axe_lattack := false
 var is_axe_rattack := false
+var is_dashing := false
+var is_dead := false
 
 func _ready() -> void:
 	dash_pb.min_value = 0
@@ -51,30 +54,41 @@ func _physics_process(_delta: float) -> void:
 	update_health_pb()
 
 func process_movement_input():
-	var direction = Input.get_vector("move_left","move_right","move_forward","move_back")
-	direction = direction.normalized()
-		
-	if direction.x > 0 :
-		player_node.flip_h = false
-		weapon_hitbox.scale.x = 1
-	elif direction.x < 0:
-		player_node.flip_h = true
-		weapon_hitbox.scale.x = -1
+	if player_health <=0:
+		is_dead = true
 	else:
-		if direction.y !=0:
-			weapon_hitbox.position.x = 0
+		is_dead = false
+		
+	if is_dead:
+		velocity = Vector2.ZERO
+	else:
+		var direction = Input.get_vector("move_left","move_right","move_forward","move_back")
+		direction = direction.normalized()
+			
+		if direction.x > 0 :
+			player_node.flip_h = false
+			weapon_hitbox.scale.x = 1
+		elif direction.x < 0:
+			player_node.flip_h = true
+			weapon_hitbox.scale.x = -1
 		else:
-			weapon_hitbox.position.x = 0
-	
-	if direction != Vector2.ZERO:
-		animation_tree["parameters/Axe_Idle/blend_position"] = direction
-		animation_tree["parameters/Axe_Light_Attack/blend_position"] = direction
-		animation_tree["parameters/Axe_walk/blend_position"] = direction
-	
-	velocity = direction * speed * (dash_range if is_dashing else 1)
-	is_dashing = false
-	
-
+			if direction.y !=0:
+				weapon_hitbox.position.x = 0
+			else:
+				weapon_hitbox.position.x = 0
+		
+		if direction != Vector2.ZERO:
+			animation_tree["parameters/Axe_Idle/blend_position"] = direction
+			animation_tree["parameters/Axe_Light_Attack/blend_position"] = direction
+			animation_tree["parameters/Axe_walk/blend_position"] = direction
+			animation_tree["parameters/Axe_Right_Attack/blend_position"] = direction
+			animation_tree["parameters/Dash/blend_position"] = direction
+		
+		velocity = direction * speed * (dash_range if is_dashing else 1)
+		
+		if dash_duration.is_stopped():
+			is_dashing = false
+		
 	move_and_slide()
 	
 func process_action_input():
@@ -89,8 +103,9 @@ func process_action_input():
 	else:
 		is_axe_rattack = false
 	if Input.is_action_just_pressed("dash"):
-		if dash_timer.is_stopped():
+		if dash_timer.is_stopped() and velocity != Vector2.ZERO:
 			is_dashing = true
+			dash_duration.start()
 			dash_timer.start()
 	
 func update_dash_pb():
@@ -101,8 +116,8 @@ func update_health_pb():
 	health_pb.value = player_health
 	#player_health -= 0.01
 	if(player_health<=0):
+		is_dead = true
 		died_text.visible = true
-		get_tree().paused = true
 
 func process_movement_animation():
 	if velocity == Vector2.ZERO:
@@ -116,6 +131,9 @@ func update_animation_parameters():
 	animation_tree["parameters/conditions/is_axe_idle"] = is_axe_idle
 	animation_tree["parameters/conditions/is_axe_lattack"] = is_axe_lattack
 	animation_tree["parameters/conditions/is_axe_move"] = is_axe_moving
+	animation_tree["parameters/conditions/is_axe_rattack"] = is_axe_rattack
+	animation_tree["parameters/conditions/is_dashing"] = is_dashing
+	animation_tree["parameters/conditions/is_dead"] = is_dead
 
 func switch_to_axe_idle() -> void:
 	is_axe_idle = true
@@ -131,12 +149,13 @@ func switch_to_axe_lattack() -> void:
 func switch_to_axe_rattack() -> void:
 	is_axe_rattack  = true
 
-func _on_hurt_box_hurt(damage: Variant) -> void:
-	player_health -= damage
-	print(player_health)
+func _on_hurt_box_hurt(dmg: Variant) -> void:
+	player_health -= dmg
+	blood_animation.play("default")
 	
-func on_trap_entered(damage:int):
-	player_health -= damage
+func on_trap_entered(dmg:int):
+	player_health -= dmg
+	blood_animation.play("default")
 
 func _on_weapon_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Enemy"):

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b6fvlqyeubokn"
-path="res://.godot/imported/axe_hero.png-e3936cb1653542642aea84fc944af332.ctex"
+uid="uid://nvknv4dcyy16"
+path="res://.godot/imported/Boss Enemy Game Jam-Walk.png-25edc4da9258dad0e80017ddc31bfe05.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/hero/axe_hero.png"
-dest_files=["res://.godot/imported/axe_hero.png-e3936cb1653542642aea84fc944af332.ctex"]
+source_file="res://assets/sprites/enemies/daBigBoss/Boss Enemy Game Jam-Walk.png"
+dest_files=["res://.godot/imported/Boss Enemy Game Jam-Walk.png-25edc4da9258dad0e80017ddc31bfe05.ctex"]
 
 [params]
 

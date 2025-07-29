@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dso61k61lbjsb"
-path="res://.godot/imported/Game_Jam_Enemy_SwordnShield.png-bf5c64065cc086e7a4c267e9ae388f04.ctex"
+uid="uid://cfmxk7vutm5ko"
+path="res://.godot/imported/lattack_down.png-e3189518af5989c046097a549bb6b950.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/enemies/Game_Jam_Enemy_SwordnShield.png"
-dest_files=["res://.godot/imported/Game_Jam_Enemy_SwordnShield.png-bf5c64065cc086e7a4c267e9ae388f04.ctex"]
+source_file="res://assets/sprites/hero/lattack_down.png"
+dest_files=["res://.godot/imported/lattack_down.png-e3189518af5989c046097a549bb6b950.ctex"]
 
 [params]
 

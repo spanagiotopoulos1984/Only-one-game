@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dxdmu7lq5ff2j"
-path="res://.godot/imported/Game_Jam_Enemy_spearman.png-6d4c217c3b8c9ba2275ae20bd63564bb.ctex"
+uid="uid://b7kr8cr8lqcjo"
+path="res://.godot/imported/Boss Enemy Game Jam-Up Base Attack.png-b9c3dfea510265b4e7d422448fe53703.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/enemies/Game_Jam_Enemy_spearman.png"
-dest_files=["res://.godot/imported/Game_Jam_Enemy_spearman.png-6d4c217c3b8c9ba2275ae20bd63564bb.ctex"]
+source_file="res://assets/sprites/enemies/daBigBoss/Boss Enemy Game Jam-Up Base Attack.png"
+dest_files=["res://.godot/imported/Boss Enemy Game Jam-Up Base Attack.png-b9c3dfea510265b4e7d422448fe53703.ctex"]
 
 [params]
 

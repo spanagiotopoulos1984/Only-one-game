@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://b07vchdp1h1ml"]
 
-[ext_resource type="Script" uid="uid://bor0721sc15vo" path="res://scenes/trap.gd" id="1_62q8x"]
+[ext_resource type="Script" uid="uid://bor0721sc15vo" path="res://scripts/trap.gd" id="1_62q8x"]
 [ext_resource type="Texture2D" uid="uid://bfeilrkn6v8g8" path="res://assets/sprites/trap.png" id="1_npg1n"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_62q8x"]

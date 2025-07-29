@@ -6,5 +6,6 @@ class_name enemy_resource
 @export var damage := 1
 @export var type: enemy_type
 @export var enemy_level := 1
+@export var attack_radius := 40
 
 enum enemy_type  {SWORDSMAN, SPEARMAN}
