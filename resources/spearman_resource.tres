@@ -4,10 +4,10 @@
 
 [resource]
 script = ExtResource("1_0jbpm")
-movement_speed = 35.0
+movement_speed = 250.0
 enemy_health = 1
 damage = 1
 type = 1
 enemy_level = 1
-attack_radius = 180
+attack_radius = 200
 metadata/_custom_type_script = "uid://ojar5tvev0jm"

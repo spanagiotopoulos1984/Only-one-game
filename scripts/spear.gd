@@ -2,7 +2,7 @@ class_name Spear
 extends Area2D
 
 @onready var sprite :  Sprite2D
-@export var speed := 45
+@export var speed := 600
 @onready var player := Player
 
 var direction := Vector2.ZERO

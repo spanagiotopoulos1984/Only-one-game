@@ -1,12 +1,19 @@
 class_name Player
 extends CharacterBody2D 
 
+var max_health = 20
+
 @export var speed := 200
-@export var dash_range := 2
+@export var dash_range := 2.5
 @export var dash_cd := 3.0
-@export var player_health := 10.0
+@export var player_health = max_health
 @export var selected_weapon = WEAPONS.AXE
-@export var damage := 1
+@export var base_damage = 1
+
+var player_level = 0
+var player_xp = 0
+var xp_per_lvl = 5
+var max_lvl = 5
 
 @onready var dash_timer := $"UI Transform/Dash/Dash Timer"
 @onready var dash_duration := $"UI Transform/Dash/Dash Duration"
@@ -17,6 +24,12 @@ extends CharacterBody2D
 @onready var player_node := $AnimatedSprite2D
 @onready var weapon_hitbox := $WeaponArea
 @onready var blood_animation := $Blood_Splatter
+
+# Sounds
+@onready var hit_sound_player = $AudioStreams/HitSoundPlayer
+@onready var swing_sound_player = $AudioStreams/SwingSoundPlayer
+#@onready var pain_sound_player = $AudioStreams/PainSoundPlayer
+#@onready var death_sound_player = $AudioStreams/DeathSoundPlayer
 
 # Weapon enum
 enum WEAPONS {AXE, HAMMER}
@@ -39,28 +52,32 @@ func _ready() -> void:
 	health_pb.value = player_health
 	health_pb.max_value = player_health
 	died_text.visible = false
-	
 	animation_tree.active = true
 
 func _process(_delta: float) -> void:
 	update_animation_parameters()
 
-func _physics_process(_delta: float) -> void:
-	process_movement_input()
+func _physics_process(delta: float) -> void:
+	process_movement_input(delta)
 	process_movement_animation()
 	process_action_input()
 	
 	update_dash_pb()
 	update_health_pb()
 
-func process_movement_input():
+func process_movement_input(delta):
+	check_victory_condition()
 	if player_health <=0:
 		is_dead = true
+		#death_sound_player.play()
 	else:
 		is_dead = false
 		
 	if is_dead:
 		velocity = Vector2.ZERO
+		died_text.text = "Press left Mouse button to restart"
+		if Input.is_action_just_pressed("primary_attack"):
+			get_tree().reload_current_scene()
 	else:
 		var direction = Input.get_vector("move_left","move_right","move_forward","move_back")
 		direction = direction.normalized()
@@ -84,12 +101,13 @@ func process_movement_input():
 			animation_tree["parameters/Axe_Right_Attack/blend_position"] = direction
 			animation_tree["parameters/Dash/blend_position"] = direction
 		
-		velocity = direction * speed * (dash_range if is_dashing else 1)
+		velocity = direction * speed * (dash_range if is_dashing else 1) * delta
 		
 		if dash_duration.is_stopped():
 			is_dashing = false
-		
-	move_and_slide()
+			
+		move_and_collide(velocity)
+	
 	
 func process_action_input():
 	if Input.is_action_just_pressed("primary_attack"):
@@ -114,7 +132,6 @@ func update_dash_pb():
 		
 func update_health_pb():
 	health_pb.value = player_health
-	#player_health -= 0.01
 	if(player_health<=0):
 		is_dead = true
 		died_text.visible = true
@@ -144,21 +161,90 @@ func switch_to_axe_moving() -> void:
 	is_axe_moving = true
 	
 func switch_to_axe_lattack() -> void:
+	base_damage = 1
 	is_axe_lattack  = true
+	if not swing_sound_player.playing:
+		var rnd = randf_range(-0.1,0.1)
+		swing_sound_player.pitch_scale = 0.9 + rnd
+		swing_sound_player.play()
 	
 func switch_to_axe_rattack() -> void:
 	is_axe_rattack  = true
+	base_damage = 3
+	if not swing_sound_player.playing:
+		var rnd = randf_range(-0.1,0.1)
+		swing_sound_player.pitch_scale = 0.9 + rnd
+		swing_sound_player.play()
 
 func _on_hurt_box_hurt(dmg: Variant) -> void:
 	player_health -= dmg
 	blood_animation.play("default")
+	play_hurt()
 	
-func on_trap_entered(dmg:int):
+func on_trap_entered(dmg: int):
 	player_health -= dmg
 	blood_animation.play("default")
+	play_hurt()
 
 func _on_weapon_area_body_entered(body: Node2D) -> void:
+	if not hit_sound_player.playing:
+		var rnd = randf_range(-0.1,0.1)
+		hit_sound_player.pitch_scale = 0.9 + rnd
+		hit_sound_player.play()
 	if body.is_in_group("Enemy"):
 		var enemy = body as Base_Enemy
-		enemy.hurt_enemy(damage)
-	pass # Replace with function body.
+		enemy.hurt_enemy(base_damage + player_level)
+	elif body.is_in_group("Boss"):
+		var enemy = body as DaBigBoss
+		enemy.hurt_enemy(base_damage + player_level)
+
+func play_hurt() -> void:
+	if not hit_sound_player.playing:
+		var rnd = randf_range(-0.1,0.1)
+		hit_sound_player.pitch_scale = 0.9 + rnd
+		hit_sound_player.play()
+		#pain_sound_player.play()
+	for i in range(0,2):
+		player_node.modulate = Color.RED
+		await get_tree().create_timer(0.1).timeout
+		player_node.modulate = Color.WHITE
+		
+		
+func fall(pos:Vector2) -> void:
+	speed = 0
+	animation_tree.active = false
+	player_node.play("RESET")
+	player_node.global_position = pos
+	
+	for i in range(0,10):
+		player_node.global_position.y += 3
+		player_node.rotation += 90
+		player_node.scale.x = player_node.scale.x -0.05
+		player_node.scale.y = player_node.scale.y -0.05
+		await get_tree().create_timer(0.1).timeout
+		
+	player_node.visible = false
+	player_health = 0
+
+func check_victory_condition():
+	var enemy = get_tree().get_nodes_in_group("Enemy").size()
+	var boss = get_tree().get_nodes_in_group("Boss").size()
+	if enemy ==0 and boss ==0:
+		died_text.text = "Victory!"
+		died_text.visible = true
+		get_tree().paused = true
+
+func _on_timer_timeout() -> void:
+	if player_health < max_health and not is_dead and player_health>0:
+		player_health+=1
+
+func increase_xp():
+	player_xp += 1
+	if player_xp == xp_per_lvl and player_level<5:
+		player_level += 1
+		max_health += 2
+		player_health += 2
+		player_xp = 0
+		dash_cd -= 0.2
+		dash_range += 0.1
+		speed += 20

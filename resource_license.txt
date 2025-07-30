@@ -1,0 +1,10 @@
+ART:
+	- All art is original, created by co-developer pavel6898 for the game jam.
+	- All code is original, created by co-developer stormlord_ for the game jam.
+AUDIO:
+	- metal.wav: Found on Open Game Art, https://opengameart.org/content/metal-interactions, licensed under PUBLIC DOMAIN by Qudop (https://opengameart.org/users/qubodup)
+	- swing.wav: Found on Open Game Art, https://opengameart.org/content/rpg-sound-pack,  licensed under PUBLIC DOMAIN by artisticdude (https://opengameart.org/users/artisticdude)
+	- music.wav: Found on Open Game Art, https://opengameart.org/content/dream-raid-cinematic-action-soundtrack, licensed under CC-BY 3.0 by Matthew Pablo (https://opengameart.org/users/matthew-pablo)
+	- death*.wav: Found on Open Game Art, https://opengameart.org/content/11-male-human-paindeath-sounds, licensed under CC-BY 3.0 by Michel Baradari
+	- pain*.wav: Found on Open Game Art, https://opengameart.org/content/11-male-human-paindeath-sounds, licensed under CC-BY 3.0 by Michel Baradari
+	- mace_hit.wav: Found on Open Game Art, https://opengameart.org/content/sound-effects-pack, licensed under PUBLIC DOMAIN by Owlish Media (https://opengameart.org/users/owlishmedia)

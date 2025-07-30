@@ -6,7 +6,10 @@ extends CharacterBody2D
 @export var attack_radius := 0
 @export var has_died := false
 @onready var spear = preload("res://scenes/spear.tscn")
+@onready var swing_sound_player = $SwingSoundPlayer
+@onready var death_sound_player = $DeathSoundPlayer
 
+var health
 var enemy_node : AnimatedSprite2D
 var player: Player
 var animation_tree : AnimationTree
@@ -24,6 +27,7 @@ var spear_origin : Marker2D
 var can_shoot := true
 
 func _ready():
+	health = resource.enemy_health
 	shoot_cd = $ShootCD
 	spear_origin = $"Spear Origin"
 	death_timer = $DeathTimer
@@ -40,49 +44,56 @@ func _ready():
 	shoot_cd.stop()
 
 func _physics_process(delta: float) -> void:
-	var should_move = true
-	var direction = global_position.direction_to(player.global_position)
-	update_animation_parameters(direction)
-	
-	var movement_speed = resource.movement_speed
-	
-	if is_spear_dying or is_shield_dying:
-		velocity = Vector2.ZERO
-	else:
-		velocity = direction * movement_speed
-		
-		if direction.x > 0:
-			enemy_node.flip_h = true
-		elif direction.x < 0: 
-			enemy_node.flip_h = false
-			
-		var distance = position.distance_to(player.position)
-		
-		if resource.type == resource.enemy_type.SWORDSMAN:
-			if distance <= attack_radius:
-				is_shield_attack = true
-				is_shield_walk = false
-			else:
-				is_shield_attack = false
-				is_shield_walk = true
-		elif resource.type == resource.enemy_type.SPEARMAN:
-			if distance <= attack_radius:
-				should_move = false
-				is_spear_attack = true
-				is_spear_walk = false
-				shoot()
-			else:
-				is_spear_walk = true
-				is_spear_attack = false
-				
+	if not player.is_dead:
+		var should_move = true
+		var direction = global_position.direction_to(player.global_position)
 		update_animation_parameters(direction)
 		
-		if should_move:
-			move_and_collide(direction * movement_speed * delta)
+		var movement_speed = resource.movement_speed
+		
+		if is_spear_dying or is_shield_dying:
+			velocity = Vector2.ZERO
+		else:
+			velocity = direction * movement_speed
+			
+			if direction.x > 0:
+				enemy_node.flip_h = true
+			elif direction.x < 0: 
+				enemy_node.flip_h = false
+				
+			var distance = position.distance_to(player.position)
+			
+			if resource.type == resource.enemy_type.SWORDSMAN:
+				if distance <= attack_radius:
+					is_shield_attack = true
+					is_shield_walk = false
+					var rnd = randf_range(-0.1,0.1)
+					swing_sound_player.pitch_scale = 0.9 - rnd
+					swing_sound_player.play()
+				else:
+					is_shield_attack = false
+					is_shield_walk = true
+			elif resource.type == resource.enemy_type.SPEARMAN:
+				if distance <= attack_radius:
+					should_move = false
+					is_spear_attack = true
+					is_spear_walk = false
+					shoot()
+				else:
+					is_spear_walk = true
+					is_spear_attack = false
+					
+			update_animation_parameters(direction)
+			
+			if should_move:
+				move_and_collide(direction * movement_speed * delta)
+	else:
+		animation_tree.active = false
+		enemy_node.play("RESET")
 	
 func hurt_enemy(damage:int):
-	resource.enemy_health -= damage
-	if(resource.enemy_health <=0):
+	health -= damage
+	if(health <=0):
 		death_timer.start()
 		if resource.type == resource.enemy_type.SWORDSMAN:
 			is_shield_dying = true
@@ -90,6 +101,8 @@ func hurt_enemy(damage:int):
 		elif resource.type == resource.enemy_type.SPEARMAN:
 			is_spear_dying = true
 			is_spear_walk = false
+	else:
+		play_hurt()
 		
 		
 func update_animation_parameters(direction):
@@ -110,15 +123,19 @@ func update_animation_parameters(direction):
 
 func shoot():
 	if can_shoot:
+		var rnd = randf_range(-0.1,0.1)
+		swing_sound_player.pitch_scale = 0.9 - rnd
+		swing_sound_player.play()
 		var spear_proj = spear.instantiate()
-		add_child(spear_proj)
 		var direction  = global_position.direction_to(player.global_position)
+		add_child(spear_proj)
 		spear_proj.direction = direction
 		spear_proj.global_position = global_position
 		can_shoot = false
 		shoot_cd.start()
 		
 func _on_death_timer_timeout() -> void:
+	player.increase_xp()
 	queue_free()
 
 func _on_werapon_area_body_entered(body: Node2D) -> void:
@@ -128,3 +145,27 @@ func _on_werapon_area_body_entered(body: Node2D) -> void:
 
 func _on_shoot_cd_timeout() -> void:
 	can_shoot = true
+
+func fall(pos:Vector2) -> void:
+	resource.movement_speed = 0
+	animation_tree.active = false
+	enemy_node.play("RESET")
+	enemy_node.global_position = pos
+	
+	for i in range(0,10):
+		enemy_node.global_position.y += 3
+		enemy_node.rotation += 90
+		enemy_node.scale.x = enemy_node.scale.x -0.05
+		enemy_node.scale.y = enemy_node.scale.y -0.05
+		await get_tree().create_timer(0.1).timeout
+	death_sound_player.play()
+	await get_tree().create_timer(0.1).timeout
+	enemy_node.visible = false
+	player.increase_xp()
+	queue_free()
+
+func play_hurt() -> void:
+	for i in range(0,2):
+		enemy_node.modulate = Color.RED
+		await get_tree().create_timer(0.1).timeout
+		enemy_node.modulate = Color.WHITE
