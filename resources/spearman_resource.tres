@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1_0jbpm")
-movement_speed = 250.0
-enemy_health = 1
+movement_speed = 150.0
+enemy_health = 2
 damage = 1
 type = 1
 enemy_level = 1

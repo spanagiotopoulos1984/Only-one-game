@@ -1,4 +1,4 @@
-[gd_scene load_steps=137 format=3 uid="uid://ddosqo3wgb3sw"]
+[gd_scene load_steps=135 format=3 uid="uid://ddosqo3wgb3sw"]
 
 [ext_resource type="Texture2D" uid="uid://bomwaqdrd6juu" path="res://assets/sprites/enemies/daBigBoss/Boss Enemy Game Jam-Down Base Attack.png" id="1_404wn"]
 [ext_resource type="Script" uid="uid://btybr11t5cbh4" path="res://scripts/da_big_boss.gd" id="1_umc3q"]
@@ -13,8 +13,10 @@
 [ext_resource type="Texture2D" uid="uid://dt3ni1d05k7v" path="res://assets/sprites/enemies/daBigBoss/Boss Enemy Game Jam-Down Walk.png" id="9_bb6i5"]
 [ext_resource type="Texture2D" uid="uid://bmg7gn2kg7ylf" path="res://assets/sprites/enemies/daBigBoss/Boss Enemy Game Jam-Walk Up.png" id="10_xyp2h"]
 [ext_resource type="AudioStream" uid="uid://wsn1l65lvseo" path="res://audio/effects/mace_hit.wav" id="13_vymad"]
-[ext_resource type="AudioStream" uid="uid://c5qhrthpopo0u" path="res://audio/effects/pain3.wav" id="14_fjla4"]
-[ext_resource type="AudioStream" uid="uid://cb4g0iwxffj7p" path="res://audio/effects/death3.wav" id="15_bb6i5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uta4a"]
+atlas = ExtResource("1_vr64u")
+region = Rect2(0, 0, 100, 100)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jppwg"]
 atlas = ExtResource("1_404wn")
@@ -212,10 +214,6 @@ region = Rect2(500, 0, 100, 100)
 atlas = ExtResource("8_nxxr0")
 region = Rect2(600, 0, 100, 100)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_uta4a"]
-atlas = ExtResource("1_vr64u")
-region = Rect2(0, 0, 100, 100)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_l1u43"]
 atlas = ExtResource("8_fjla4")
 region = Rect2(0, 0, 100, 100)
@@ -298,6 +296,14 @@ region = Rect2(300, 0, 100, 100)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_eva7g"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uta4a")
+}],
+"loop": true,
+"name": &"RESET",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_jppwg")
@@ -482,14 +488,6 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_uta4a")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_l1u43")
 }, {
 "duration": 1.0,
@@ -580,134 +578,146 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/path = NodePath("AttackHurtBox/CollisionShape2D:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.001),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [0, 0]
+"values": [Vector2(0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("AttackHurtBox/CollisionShape2D:position")
+tracks/1/path = NodePath("AttackHurtBox/CollisionShape2D:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [Vector2(0, 0)]
+"values": [true]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("AttackHurtBox/CollisionShape2D:disabled")
+tracks/2/path = NodePath("AttackHurtBox/CollisionShape2D:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [Vector2(1e-05, 1e-05)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("AttackHurtBox/CollisionShape2D:scale")
+tracks/3/path = NodePath("AttackHurtBox/CollisionShape2D:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [Vector2(1e-05, 1e-05)]
+"values": [0.0]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("AttackHurtBox/CollisionShape2D:rotation")
+tracks/4/path = NodePath("Hitbox:disabled")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [0.0]
+"values": [false]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Hitbox:disabled")
+tracks/5/path = NodePath("AnimatedSprite2D:scale")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [Vector2(1, 1)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("AnimatedSprite2D:scale")
+tracks/6/path = NodePath("AnimatedSprite2D:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [Vector2(1, 1)]
+"values": [Vector2(0, 0)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("AnimatedSprite2D:position")
+tracks/7/path = NodePath("AnimatedSprite2D:animation")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.001),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [Vector2(0, 0)]
+"values": [&"RESET"]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("AnimatedSprite2D:animation")
+tracks/8/path = NodePath("Hitbox:shape")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0.001),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [&"default"]
-}
-tracks/9/type = "value"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("Hitbox:shape")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [SubResource("RectangleShape2D_nxxr0")]
 }
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("AnimatedSprite2D:frame")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.001),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath(".:movement_speed")
+tracks/10/path = NodePath("AnimatedSprite2D:speed_scale")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.001),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath(".:movement_speed")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.001),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [50]
+"values": [140]
 }
 
 [sub_resource type="Animation" id="Animation_ujcx7"]
@@ -1653,15 +1663,16 @@ transitions = ["Start", "moving", SubResource("AnimationNodeStateMachineTransiti
 graph_offset = Vector2(57, -92)
 
 [node name="DaBigBoss" type="CharacterBody2D" groups=["Boss"]]
+z_index = 2
 scale = Vector2(2, 2)
 collision_layer = 4
 collision_mask = 11
 script = ExtResource("1_umc3q")
-movement_speed = 50
 is_charging = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_eva7g")
+animation = &"RESET"
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 position = Vector2(-2, 2)
@@ -1702,14 +1713,8 @@ one_shot = true
 wait_time = 4.0
 one_shot = true
 
-[node name="AttackSoundPlayer" type="AudioStreamPlayer2D" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("13_vymad")
-
-[node name="EffortSoundPlayer" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("14_fjla4")
-
-[node name="DeathSoundPlayer" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("15_bb6i5")
 
 [connection signal="body_entered" from="AttackHurtBox" to="." method="_on_attack_hurt_box_body_entered"]
 [connection signal="timeout" from="SlamCD" to="." method="_on_slam_cd_timeout"]

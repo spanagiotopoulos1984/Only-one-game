@@ -36,7 +36,6 @@ animations = [{
 size = Vector2(32, 32)
 
 [node name="Area2D" type="Area2D" groups=["trap"]]
-collision_layer = 0
 script = ExtResource("1_62q8x")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

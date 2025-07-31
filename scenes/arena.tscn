@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://csif1m546detu"]
+[gd_scene load_steps=15 format=4 uid="uid://csif1m546detu"]
 
 [ext_resource type="Script" uid="uid://b51cur22ny40n" path="res://scripts/test_area.gd" id="1_oexds"]
 [ext_resource type="Texture2D" uid="uid://dm6h2et5uqxoy" path="res://assets/map/map.png" id="2_naajo"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bcrv4uteskt0c" path="res://scenes/boss_spawner.tscn" id="8_naajo"]
 [ext_resource type="PackedScene" uid="uid://btmc52ktpng6v" path="res://scenes/base_enemy_spawner.tscn" id="8_oexds"]
 [ext_resource type="AudioStream" uid="uid://dpukjxiybskrb" path="res://audio/music/music.mp3" id="9_naajo"]
+[ext_resource type="PackedScene" uid="uid://b07vchdp1h1ml" path="res://scenes/trap.tscn" id="11_k1k1x"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a0f05"]
 texture = ExtResource("2_naajo")
@@ -669,7 +670,7 @@ offset_bottom = 904.0
 texture = ExtResource("3_41jku")
 
 [node name="Player" parent="." instance=ExtResource("4_k1k1x")]
-position = Vector2(-1172, 121)
+position = Vector2(-1119, 144)
 
 [node name="Pit" type="Area2D" parent="."]
 position = Vector2(32, 122)
@@ -745,20 +746,114 @@ resource = ExtResource("8_ixwup")
 
 [node name="Spawners" type="Node" parent="."]
 
-[node name="BaseEnemySpawner" parent="Spawners" instance=ExtResource("8_oexds")]
-position = Vector2(-3, -394)
-shut_down_timer_cd = 120.0
+[node name="Traps" type="Node" parent="."]
 
-[node name="BaseEnemySpawner2" parent="Spawners" instance=ExtResource("8_oexds")]
-position = Vector2(-5, 708)
-shut_down_timer_cd = 120.0
+[node name="Area2D" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-449, 534)
 
-[node name="BaseEnemySpawner3" parent="Spawners" instance=ExtResource("8_oexds")]
-position = Vector2(1087, 187)
-start_timer_cd = 120.0
-shut_down_timer_cd = 120.0
+[node name="Area2D2" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-549, 151)
 
-[node name="BossSpawner" parent="Spawners" instance=ExtResource("8_naajo")]
-position = Vector2(965, 182)
+[node name="Area2D3" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-644, -68)
+
+[node name="Area2D4" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-1098, 227)
+
+[node name="Area2D5" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-642, 400)
+
+[node name="Area2D6" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-332, -177)
+
+[node name="Area2D7" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-287, 268)
+
+[node name="Area2D8" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-145, 503)
+
+[node name="Area2D9" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(197, -249)
+
+[node name="Area2D10" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-66, -329)
+
+[node name="Area2D11" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(269, 669)
+
+[node name="Area2D12" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(124, 320)
+
+[node name="Area2D13" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(500, 375)
+
+[node name="Area2D14" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(224, 51)
+
+[node name="Area2D15" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(435, -163)
+
+[node name="Area2D16" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(638, 47)
+
+[node name="Area2D17" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(725, -167)
+
+[node name="Area2D18" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(766, 465)
+
+[node name="Area2D19" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(959, 282)
+
+[node name="Area2D20" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(925, -49)
+
+[node name="Area2D21" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-597, -222)
+
+[node name="Area2D22" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-307, -415)
+
+[node name="Area2D23" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-667, 558)
+
+[node name="Area2D24" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-283, 703)
+
+[node name="Area2D25" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-314, 20)
+
+[node name="Area2D26" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(511, 603)
+
+[node name="Area2D27" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-1, 655)
+
+[node name="Area2D28" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(114, 482)
+
+[node name="Area2D29" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(-55, -136)
+
+[node name="Area2D30" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(369, 165)
+
+[node name="Area2D31" parent="Traps" instance=ExtResource("11_k1k1x")]
+position = Vector2(480, -384)
+
+[node name="BaseEnemySpawner" parent="." instance=ExtResource("8_oexds")]
+position = Vector2(1131, 213)
+
+[node name="BaseEnemySpawner2" parent="." instance=ExtResource("8_oexds")]
+position = Vector2(0, 761)
+
+[node name="BaseEnemySpawner3" parent="." instance=ExtResource("8_oexds")]
+position = Vector2(13, -419)
+
+[node name="BossSpawner" parent="." instance=ExtResource("8_naajo")]
+position = Vector2(1105, 128)
+
+[node name="BossSpawner2" parent="." instance=ExtResource("8_naajo")]
+position = Vector2(1105, 128)
 
 [connection signal="body_entered" from="Pit" to="." method="_on_pit_body_entered"]

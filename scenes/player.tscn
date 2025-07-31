@@ -2263,14 +2263,15 @@ animations = [{
 size = Vector2(20, 29)
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
-collision_layer = 2
+z_index = 2
+collision_layer = 3
 collision_mask = 13
 script = ExtResource("1_g2els")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(-1, 1)
 sprite_frames = SubResource("SpriteFrames_j2b1d")
-animation = &"dash_up"
+animation = &"axe_idle_up"
 frame = 1
 speed_scale = 0.1
 metadata/_aseprite_wizard_interface_config_ = {
@@ -2316,7 +2317,7 @@ libraries = {
 
 [node name="Camera2D" type="Camera2D" parent="."]
 rotation = 0.20299
-zoom = Vector2(0.25, 0.25)
+zoom = Vector2(1.75, 1.75)
 position_smoothing_enabled = true
 rotation_smoothing_enabled = true
 
@@ -2391,13 +2392,17 @@ sprite_frames = SubResource("SpriteFrames_ujl30")
 frame = 3
 frame_progress = 1.0
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 5.0
+[node name="RegenTimer" type="Timer" parent="."]
+wait_time = 8.0
+one_shot = true
 autostart = true
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("17_qfm1y")
+
 [node name="Area2D" type="Area2D" parent="."]
-collision_layer = 4
-collision_mask = 4
+collision_layer = 5
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(0, -2.5)
@@ -2408,9 +2413,6 @@ shape = SubResource("RectangleShape2D_a8ls1")
 [node name="PainSoundPlayer" type="AudioStreamPlayer2D" parent="AudioStreams"]
 stream = ExtResource("17_60mlk")
 
-[node name="HitSoundPlayer" type="AudioStreamPlayer2D" parent="AudioStreams"]
-stream = ExtResource("17_qfm1y")
-
 [node name="SwingSoundPlayer" type="AudioStreamPlayer2D" parent="AudioStreams"]
 stream = ExtResource("18_fulsm")
 
@@ -2418,4 +2420,4 @@ stream = ExtResource("18_fulsm")
 stream = ExtResource("19_4r5pv")
 
 [connection signal="body_entered" from="WeaponArea" to="." method="_on_weapon_area_body_entered"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="RegenTimer" to="." method="_on_timer_timeout"]

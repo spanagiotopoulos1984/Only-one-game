@@ -6,12 +6,9 @@ extends CharacterBody2D
 @onready var slam_cd = $SlamCD
 @onready var animation_tree = $AnimationTree
 @onready var animation_player = $AnimationPlayer
-@onready var attack_sound_player = $AttackSoundPlayer
-@onready var effort_sound_player = $EffortSoundPlayer
-@onready var death_sound_player = $DeathSoundPlayer
 
 @export var health := 50
-@export var movement_speed := 80
+@export var movement_speed := 140
 @export var attack_radius := 80
 @export var charge_coef := 5
 @export var is_charging := false
@@ -24,6 +21,7 @@ extends CharacterBody2D
 
 var can_charge = false
 var can_slam = false
+var can_play_sound = true
 
 var player: Player
 
@@ -59,13 +57,12 @@ func _physics_process(delta: float) -> void:
 					is_attacking = false
 					slam_cd.start()
 					can_slam = false
-					effort_sound_player.play()
+					play_sound("res://audio/effects/pain3.wav")
 				else:
 					is_slamming = false
 					is_attacking = true
 					var rnd = randf_range(-0.1,0.1)
-					attack_sound_player.pitch_scale = 0.9 + rnd
-					attack_sound_player.play()
+					play_sound("res://audio/effects/metal.wav")
 				is_walking = false
 				is_charging = false
 			else:
@@ -90,7 +87,7 @@ func charge(delta:float):
 	await get_tree().create_timer(1.3).timeout
 	can_charge = false
 	charge_cd.start()
-	effort_sound_player.play()
+	play_sound("res://audio/effects/pain2.wav")
 		
 func update_animation_parameters():
 	animation_tree["parameters/conditions/is_moving"] = is_walking
@@ -105,7 +102,7 @@ func hurt_enemy(damage:int) -> void:
 
 func check_health() -> void:
 	if health <= 0:
-		death_sound_player.play()
+		play_sound("res://audio/effects/death3.wav")
 		movement_speed = 0
 		is_attacking = false
 		is_charging = false
@@ -139,3 +136,19 @@ func emergency_charge():
 	charge_cd.stop()
 	can_charge = true
 	charge(1)
+
+func play_sound(path: String):
+	var audio_stream_player  = $AudioStreamPlayer
+	if can_play_sound:
+		can_play_sound = false
+		var stream = load(path)
+		var rnd = randf_range(-0.1,0.1)
+		if stream and stream is AudioStream:
+			audio_stream_player.pitch_scale = 0.9 + rnd
+			audio_stream_player.stream = stream
+			audio_stream_player.play()
+		else:
+			push_warning("Invalid audio stream: " + path)
+		await audio_stream_player.finished
+		await get_tree().create_timer(1).timeout
+		can_play_sound = true

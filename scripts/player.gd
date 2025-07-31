@@ -4,7 +4,7 @@ extends CharacterBody2D
 var max_health = 20
 
 @export var speed := 200
-@export var dash_range := 2.5
+@export var dash_range := 2.0
 @export var dash_cd := 3.0
 @export var player_health = max_health
 @export var selected_weapon = WEAPONS.AXE
@@ -14,6 +14,7 @@ var player_level = 0
 var player_xp = 0
 var xp_per_lvl = 5
 var max_lvl = 5
+var regen_time = 8
 
 @onready var dash_timer := $"UI Transform/Dash/Dash Timer"
 @onready var dash_duration := $"UI Transform/Dash/Dash Duration"
@@ -24,12 +25,9 @@ var max_lvl = 5
 @onready var player_node := $AnimatedSprite2D
 @onready var weapon_hitbox := $WeaponArea
 @onready var blood_animation := $Blood_Splatter
+@onready var regen_timer := $RegenTimer
 
-# Sounds
-@onready var hit_sound_player = $AudioStreams/HitSoundPlayer
-@onready var swing_sound_player = $AudioStreams/SwingSoundPlayer
-#@onready var pain_sound_player = $AudioStreams/PainSoundPlayer
-#@onready var death_sound_player = $AudioStreams/DeathSoundPlayer
+var can_play_sound := true
 
 # Weapon enum
 enum WEAPONS {AXE, HAMMER}
@@ -163,18 +161,12 @@ func switch_to_axe_moving() -> void:
 func switch_to_axe_lattack() -> void:
 	base_damage = 1
 	is_axe_lattack  = true
-	if not swing_sound_player.playing:
-		var rnd = randf_range(-0.1,0.1)
-		swing_sound_player.pitch_scale = 0.9 + rnd
-		swing_sound_player.play()
+	play_sound("res://audio/effects/swing.wav")
 	
 func switch_to_axe_rattack() -> void:
 	is_axe_rattack  = true
 	base_damage = 3
-	if not swing_sound_player.playing:
-		var rnd = randf_range(-0.1,0.1)
-		swing_sound_player.pitch_scale = 0.9 + rnd
-		swing_sound_player.play()
+	play_sound("res://audio/effects/swing.wav")
 
 func _on_hurt_box_hurt(dmg: Variant) -> void:
 	player_health -= dmg
@@ -187,10 +179,7 @@ func on_trap_entered(dmg: int):
 	play_hurt()
 
 func _on_weapon_area_body_entered(body: Node2D) -> void:
-	if not hit_sound_player.playing:
-		var rnd = randf_range(-0.1,0.1)
-		hit_sound_player.pitch_scale = 0.9 + rnd
-		hit_sound_player.play()
+	play_sound("res://audio/effects/pain1.wav")
 	if body.is_in_group("Enemy"):
 		var enemy = body as Base_Enemy
 		enemy.hurt_enemy(base_damage + player_level)
@@ -199,11 +188,7 @@ func _on_weapon_area_body_entered(body: Node2D) -> void:
 		enemy.hurt_enemy(base_damage + player_level)
 
 func play_hurt() -> void:
-	if not hit_sound_player.playing:
-		var rnd = randf_range(-0.1,0.1)
-		hit_sound_player.pitch_scale = 0.9 + rnd
-		hit_sound_player.play()
-		#pain_sound_player.play()
+	play_sound("res://audio/effects/pain2.wav")
 	for i in range(0,2):
 		player_node.modulate = Color.RED
 		await get_tree().create_timer(0.1).timeout
@@ -237,6 +222,7 @@ func check_victory_condition():
 func _on_timer_timeout() -> void:
 	if player_health < max_health and not is_dead and player_health>0:
 		player_health+=1
+	regen_timer.start(regen_time)
 
 func increase_xp():
 	player_xp += 1
@@ -245,6 +231,22 @@ func increase_xp():
 		max_health += 2
 		player_health += 2
 		player_xp = 0
-		dash_cd -= 0.2
-		dash_range += 0.1
+		dash_cd -= 0.3
 		speed += 20
+		regen_time -= 1
+		
+func play_sound(path: String):
+	var audio_stream_player  = $AudioStreamPlayer
+	if can_play_sound:
+		can_play_sound = false
+		var stream = load(path)
+		var rnd = randf_range(-0.1,0.1)
+		if stream and stream is AudioStream:
+			audio_stream_player.pitch_scale = 0.9 + rnd
+			audio_stream_player.stream = stream
+			audio_stream_player.play()
+		else:
+			push_warning("Invalid audio stream: " + path)
+		await audio_stream_player.finished
+		await get_tree().create_timer(1).timeout
+		can_play_sound = true

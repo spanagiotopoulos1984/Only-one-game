@@ -4,7 +4,6 @@ extends Area2D
 @export var trap_sprang = false
 @onready var sprite = $AnimatedSprite2D
 
-
 func _on_body_entered(body: Node2D) -> void:
 	var trap_damage = 1 if trap_sprang else 3
 	
